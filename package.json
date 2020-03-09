@@ -1,0 +1,15 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "serve": "ts-node-dev index.ts"
+  },
+  "repository": "git@github.com:Haixiang6123/node-server.git",
+  "author": "Haixiang <haixiang6123@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^13.9.0"
+  }
+}
