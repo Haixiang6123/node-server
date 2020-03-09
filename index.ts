@@ -10,16 +10,29 @@ server.on('request', (request, response) => {
   const {method, url: urlPath, headers} = request
   // 使用 url.parse 解析
   const {pathname, search} = url.parse(urlPath)
-  const filename = pathname.substr(1)
+
+  let filename = pathname.substr(1)
+  if (filename === '') {
+    filename = 'index.html'
+  }
 
   response.setHeader('Content-Type', 'text/html; charset=utf-8')
   fs.readFile(path.resolve(publicDir, filename), (error, data) => {
     if (error) {
-      response.statusCode = 404
-      response.end('你要的文件不存在')
-    }
-    else {
-      response.end(data.toString())
+      if (error.errno === -2) {
+        response.statusCode = 404
+        fs.readFile(path.resolve(publicDir, '404.html'), (error, data) => {
+          response.end(data)
+        })
+      } else if (error.errno === -21) {
+        response.statusCode = 403
+        response.end('无权查看目录内容')
+      } else {
+        response.statusCode = 500
+        response.end('服务器繁忙')
+      }
+    } else {
+      response.end(data)
     }
   })
 })
